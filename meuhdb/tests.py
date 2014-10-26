@@ -84,7 +84,7 @@ class DatabaseStoreAutocommitTest(TestCase):
     def tearDown(self):
         unlink(self.filename)
 
-    def test_autocommit(self):
+    def test_autocommit_set(self):
         self.db.set('key', {'hello': 'world'})
         db = MeuhDb(self.filename)  # reload
         self.assertEquals(db.get('key'), {'hello': 'world'})
@@ -106,6 +106,12 @@ class DatabaseStoreAutocommitTest(TestCase):
         index = db.indexes['name']
         self.assertEquals(index['Alice'], set(['1']))
         self.assertEquals(index['Bob'], set(['2']))
+
+    def test_delete_index(self):
+        self.db.create_index('name')
+        self.db.remove_index('name')
+        db = MeuhDb(self.filename)  # reload
+        self.assertFalse('name' in db.indexes)
 
 
 class DatabaseFilter(InMemoryDatabaseData, TestCase):
