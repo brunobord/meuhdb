@@ -125,8 +125,9 @@ simply run the command ``tox``.
 A lot of things:
 
 * Advanced Index manipulation (remove_index, uniqueness?, multiple fields?),
-* Advanced queries (à la Django with ``field__gt``, ``field__contains``, etc)
-* Python 3 support
+* Advanced queries (à la Django with ``field__gt``, ``field__contains``, etc),
+* ``insert`` method with automatic UUID generation,
+* Python 3 support...
 
 ----
 
