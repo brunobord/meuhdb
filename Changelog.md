@@ -1,6 +1,6 @@
 # MeuhDb
 
-## v0.0.1 (unreleased)
+## v0.0.1 (2014-10-26)
 
 * Initial release,
 * Supports to standard json, simplejson, ujson, msgpack,
