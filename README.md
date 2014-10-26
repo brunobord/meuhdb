@@ -120,6 +120,16 @@ these enhanced backends:
 To run the tests, you'll have to install ``tox`` (``pip install tox``) and
 simply run the command ``tox``.
 
+### Todo
+
+A lot of things:
+
+* Advanced Index manipulation (remove_index, uniqueness?, multiple fields?),
+* Advanced queries (à la Django with ``field__gt``, ``field__contains``, etc)
+* Python 3 support
+
+----
+
 ## License
 
 This software is published under the terms of the MIT License
