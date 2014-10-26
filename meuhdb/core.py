@@ -143,8 +143,8 @@ class MeuhDb(object):
         if self._meta.path:
             with open(self._meta.path, 'w') as fd:
                 raw = self.raw.copy()
-                for index_name, values in raw['indexes'].iteritems():
-                    for value, keys in values.iteritems():
+                for index_name, values in raw['indexes'].items():
+                    for value, keys in values.items():
                         raw['indexes'][index_name][value] = list(keys)
                 fd.write(self.serialize(raw))
 
@@ -154,12 +154,12 @@ class MeuhDb(object):
 
     def keys_to_values(self, keys):
         "Return the items in the keystore with keys in `keys`."
-        return dict((k, v) for k, v in self.data.iteritems() if k in keys)
+        return dict((k, v) for k, v in self.data.items() if k in keys)
 
     def filter_key(self, key, value):
         "Search keys whose values match with the searched values"
         searched = {key: value}
-        return set([k for k, v in self.data.iteritems() if
+        return set([k for k, v in self.data.items() if
                     intersect(searched, v) == searched])
 
     def filter(self, **kwargs):
@@ -189,7 +189,7 @@ class MeuhDb(object):
 
     def update_index(self, key, value):
         "Update the index with the new key/values."
-        for k, v in value.iteritems():
+        for k, v in value.items():
             if k in self.indexes:
                 if v not in self.indexes[k]:
                     self.indexes[k][v] = set([])
@@ -217,7 +217,7 @@ class MeuhDb(object):
         self.indexes[idx_name] = indexes
 
     def clean_index(self):
-        for index_name, values in self.indexes.iteritems():
+        for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):
                     values[value] = set(values[value])
