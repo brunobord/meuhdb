@@ -216,6 +216,11 @@ class MeuhDb(object):
                 indexes[value].add(key)
         self.indexes[idx_name] = indexes
 
+    @autocommit
+    def remove_index(self, idx_name):
+        if idx_name in self.indexes:
+            del self.indexes[idx_name]
+
     def clean_index(self):
         for index_name, values in self.indexes.items():
             for value in values:

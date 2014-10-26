@@ -201,6 +201,13 @@ class DatabaseIndexTest(InMemoryDatabaseData, TestCase):
         self.assertTrue(self.db._used_index)
         self.assertFalse(result)
 
+    def test_remove_index_name(self):
+        self.db.create_index('name')
+        self.assertTrue('name' in self.db.indexes)
+        self.db.remove_index('name')
+        self.assertFalse('name' in self.db.indexes)
+
+
 if getenv('RUN_PERFORMANCE_TESTS', False):
     class DatabasePerformanceTest(InMemoryDatabase, TestCase):
 
