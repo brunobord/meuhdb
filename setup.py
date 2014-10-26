@@ -9,7 +9,7 @@ NAME = 'meuhdb'
 DESCRIPTION = 'A database that says "Meuh".'
 REQUIREMENTS = [
 ]
-__VERSION__ = '0.0.1'
+__VERSION__ = '0.0.2-dev'
 
 params = dict(
     name=NAME,
@@ -18,6 +18,7 @@ params = dict(
     version=__VERSION__,
     author='Bruno Bord',
     author_email='bruno@jehaisleprintemps.net',
+    url="https://github.com/brunobord/meuhdb/",
     license='MIT License',
     include_package_data=True,
     install_requires=REQUIREMENTS,
