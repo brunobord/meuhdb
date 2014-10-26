@@ -124,11 +124,8 @@ simply run the command ``tox``.
 
 ### Todo
 
-A lot of things:
-
-* Advanced Index manipulation (remove_index, uniqueness?, multiple fields?),
-* Advanced queries (à la Django with ``field__gt``, ``field__contains``, etc),
-* ``insert`` method with automatic UUID generation,
+A lot of things are missing. [The Github issues list](https://github.com/brunobord/meuhdb/issues)
+will work as a "todo list". If you have any bug report, suggestion, please do.
 
 ----
 
