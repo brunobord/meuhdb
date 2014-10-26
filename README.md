@@ -2,6 +2,8 @@
 
 > The database that says "Meuh"
 
+[![Build Status](https://travis-ci.org/brunobord/meuhdb.svg?branch=master)](https://travis-ci.org/brunobord/meuhdb)
+
 **MeuhDb** is a "dummy" key / JSON value store written in Python.
 
 ## Basic usage

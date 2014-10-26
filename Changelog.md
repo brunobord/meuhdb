@@ -8,3 +8,4 @@
 * set/get values, simple filter, simple indexes,
 * in-memory or file storage,
 * autocommit option
+* #8: automated tests using [travis-ci](https://travis-ci.org/)
