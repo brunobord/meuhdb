@@ -3,6 +3,7 @@
 MeuhDB, a database that says "meuh".
 """
 from __future__ import unicode_literals
+from uuid import uuid4
 import os
 from functools import wraps
 import json
@@ -124,6 +125,13 @@ class MeuhDb(object):
             self.delete_from_index(key)
         self.data[key] = value
         self.update_index(key, value)
+
+    @autocommit
+    def insert(self, value):
+        "Insert value in the keystore. Return the UUID key."
+        key = str(uuid4())
+        self.set(key, value)
+        return key
 
     @autocommit
     def delete(self, key):

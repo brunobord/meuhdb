@@ -44,6 +44,10 @@ class DatabaseTest(InMemoryDatabase, TestCase):
         self.db.update('other', {'hello': 'world'})
         self.assertEquals(self.db.get('other'), {'hello': 'world'})
 
+    def test_insert(self):
+        key = self.db.insert({'hello': 'world'})
+        self.assertEquals(self.db.get(key), {'hello': 'world'})
+
 
 class DatabaseStoreTest(TestCase):
     def setUp(self):
@@ -145,6 +149,11 @@ class DatabaseStoreAutocommitTest(TestCase):
         index = db.indexes['name']
         self.assertEquals(index['Alice'], set(['1']))
         self.assertEquals(index['Bob'], set(['2']))
+
+    def test_autocommit_insert(self):
+        key = self.db.insert({'hello': 'world'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertEquals(db.get(key), {'hello': 'world'})
 
 
 class DatabaseFilter(InMemoryDatabaseData, TestCase):

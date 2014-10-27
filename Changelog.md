@@ -3,7 +3,8 @@
 ## v0.0.2 (unreleased)
 
 * Added a ``remove_index`` to remove unwanted index,
-* Added an "update" method,
+* Added an ``update`` method,
+* Added an ``insert`` method,
 * Dropped msgpack format: it was a bad idea,
 * The tox test grid is now complete,
 
