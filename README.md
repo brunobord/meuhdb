@@ -6,6 +6,17 @@
 
 **MeuhDb** is a "dummy" key / JSON value store written in Python.
 
+## Install
+
+To install the latest release:
+
+```
+pip install meuhdb
+```
+
+... but since this is a very early release, you'd better stick to this Github source repository.
+You may want to read [the Changelog](Changelog.md), too.
+
 ## Basic usage
 
 ``` python
