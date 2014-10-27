@@ -9,7 +9,7 @@ NAME = 'meuhdb'
 DESCRIPTION = 'A database that says "Meuh".'
 REQUIREMENTS = [
 ]
-__VERSION__ = '0.0.2'
+__VERSION__ = '0.0.3-dev'
 
 params = dict(
     name=NAME,
