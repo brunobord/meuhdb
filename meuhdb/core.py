@@ -1,6 +1,8 @@
+#-*- coding: utf-8 -*-
 """
 MeuhDB, a database that says "meuh".
 """
+from __future__ import unicode_literals
 import os
 from functools import wraps
 import json
@@ -27,14 +29,6 @@ try:
     DUMPER.update({'ujson': ujson.dumps})
     LOADER.update({'ujson': ujson.loads})
     DEFAULT_BACKEND = 'ujson'
-except:
-    pass
-
-try:
-    import msgpack
-    DUMPER.update({'msgpack': msgpack.packb})
-    LOADER.update({'msgpack': msgpack.unpackb})
-    DEFAULT_BACKEND = 'msgpack'
 except:
     pass
 

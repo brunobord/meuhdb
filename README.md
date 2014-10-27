@@ -49,19 +49,14 @@ MeuhDb(path=None, autocommit=False, backend=DEFAULT_BACKEND)
 * `autocommit`: if set to `True`, every "write" operation will be transmitted
   to the file. It can be I/O consuming, since the whole DB is written on the
   disk every time.
-* `backend`: chose which JSON backend you can use. There are 4 backends
+* `backend`: chose which JSON backend you can use. There are 3 backends
   possible, from the least efficient, to the best one: "json" (from the standard
-  lib), "simplejson", "ujson" and "msgpack".
+  lib), "simplejson" or "ujson".
   **MeuhDb** will try to load each one of them and make them available if you
   want. The ``DEFAULT_BACKEND`` value will take the most performing backend
   value available.
   If you provide an unavailable backend, don't worry, **MeuhDb** will fallback
   to the comfortable ``json` from the standard library.
-
-**WARNING**: ``msgpack`` library will load and dump your JSON data into a binary
-format. It's a very fast and compact storage method, but binary data is not
-readable with a regular text viewer. If you want to browse your database, you'll
-have to rely in the ``msgpack`` library.
 
 Example:
 
@@ -116,8 +111,7 @@ You may want to install one or more of these packages to be able to pick one of
 these enhanced backends:
 
 * `simplejson`
-* `usjon`
-* `msgpack`
+* `ujson`
 
 To run the tests, you'll have to install ``tox`` (``pip install tox``) and
 simply run the command ``tox``.
