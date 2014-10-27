@@ -1,6 +1,6 @@
 # MeuhDb
 
-## v0.0.2 (unreleased)
+## v0.0.2 (2014-10-27)
 
 * Added a ``remove_index`` to remove unwanted index,
 * Added an ``update`` method,

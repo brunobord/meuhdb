@@ -25,6 +25,11 @@
 {}
 >>> db.exists('one')
 False
+>>> db.insert({'name': 'John'})
+eb3c3a1d-8999-4052-9e3c-2f3542c047b1
+>>> db.update('eb3c3a1d-8999-4052-9e3c-2f3542c047b1', {'age': 42})
+>>> db.get('eb3c3a1d-8999-4052-9e3c-2f3542c047b1')
+{'age': 42, 'name': 'John'}
 ```
 
 At the moment, you can only query on "equalities", i.e. a strict equality
