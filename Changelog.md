@@ -3,6 +3,7 @@
 ## v0.0.2 (unreleased)
 
 * Added a ``remove_index`` to remove unwanted index,
+* Added an "update" method,
 
 ## v0.0.1 (2014-10-26)
 

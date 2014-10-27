@@ -138,6 +138,18 @@ class MeuhDb(object):
             self.delete_from_index(key)
         del self.data[key]
 
+    @autocommit
+    def update(self, key, value):
+        """Update a `key` in the keystore.
+        If the key is non-existent, it's being created
+        """
+        if key in self.data:
+            v = self.get(key)
+            v.update(value)
+        else:
+            v = value
+        self.set(key, v)
+
     def commit(self):
         "Commit data to the storage."
         if self._meta.path:
@@ -185,7 +197,8 @@ class MeuhDb(object):
         old_value = self.data[key]
         keys = set(old_value.keys()).intersection(self.indexes.keys())
         for index_name in keys:
-            del self.indexes[index_name][old_value[index_name]]
+            if old_value[index_name] in self.indexes[index_name]:
+                del self.indexes[index_name][old_value[index_name]]
 
     def update_index(self, key, value):
         "Update the index with the new key/values."
