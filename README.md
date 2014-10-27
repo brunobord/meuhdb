@@ -71,7 +71,7 @@ Example:
 >>> db.commit()  # saves to disk
 >>> db = MeuhDb('hello.json', autocommit=True)
 >>> db.all()  # Data is reloaded from the disk
->>> {u'1': {u'name': u'Alice'}}
+{u'1': {u'name': u'Alice'}}
 >>> db.set('2', {'name': 'Bob'})  # data is written on disk
 ```
 
