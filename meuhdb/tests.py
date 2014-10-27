@@ -33,6 +33,15 @@ class DatabaseTest(InMemoryDatabase, TestCase):
         self.db.delete('key')
         self.assertFalse(self.db.exists('key'))
 
+    def test_update(self):
+        self.db.set('key', {'name': "me"})
+        self.assertEquals(self.db.get('key'), {'name': "me"})
+        self.db.update('key', {'thing': 'stuff'})
+        self.assertEquals(self.db.get('key'), {'name': "me", 'thing': 'stuff'})
+        # updating an non-existing key means creating it
+        self.db.update('other', {'hello': 'world'})
+        self.assertEquals(self.db.get('other'), {'hello': 'world'})
+
 
 class DatabaseStoreTest(TestCase):
     def setUp(self):
@@ -95,7 +104,7 @@ class DatabaseStoreAutocommitTest(TestCase):
         db = MeuhDb(self.filename)  # reload
         self.assertFalse(db.exists('key'))
 
-    def test_create_index(self):
+    def test_autocommit_create_index(self):
         self.db.set('1', {'name': 'Alice'})
         self.db.set('2', {'name': 'Bob'})
         self.db.create_index('name')
@@ -107,11 +116,33 @@ class DatabaseStoreAutocommitTest(TestCase):
         self.assertEquals(index['Alice'], set(['1']))
         self.assertEquals(index['Bob'], set(['2']))
 
-    def test_delete_index(self):
+    def test_autocommit_delete_index(self):
         self.db.create_index('name')
         self.db.remove_index('name')
         db = MeuhDb(self.filename)  # reload
         self.assertFalse('name' in db.indexes)
+
+    def test_autocommit_update(self):
+        self.db.set('key', {'name': "me"})
+        self.assertEquals(self.db.get('key'), {'name': "me"})
+        self.db.update('key', {'thing': 'stuff'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertEquals(db.get('key'), {'name': "me", 'thing': 'stuff'})
+        # updating an non-existing key means creating it
+        self.db.update('other', {'hello': 'world'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertEquals(db.get('other'), {'hello': 'world'})
+
+    def test_autocommit_update_name_index(self):
+        self.db.set('1', {'name': 'Alice'})
+        self.db.set('2', {'flag': True})
+        self.db.create_index('name')
+        self.db.update('2', {'name': 'Bob'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertTrue('name' in db.indexes)
+        index = db.indexes['name']
+        self.assertEquals(index['Alice'], set(['1']))
+        self.assertEquals(index['Bob'], set(['2']))
 
 
 class DatabaseFilter(InMemoryDatabaseData, TestCase):
