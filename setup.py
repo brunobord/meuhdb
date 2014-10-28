@@ -10,7 +10,7 @@ DESCRIPTION = 'A database that says "Meuh".'
 REQUIREMENTS = [
     'six',
 ]
-__VERSION__ = '0.0.3'
+__VERSION__ = '0.0.4-dev'
 
 params = dict(
     name=NAME,
