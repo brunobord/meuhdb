@@ -1,10 +1,12 @@
 # MeuhDb
 
-## v0.0.3 (unreleased)
+## v0.0.3 (2014-10-28)
 
-* Added support to ``jsonlib`` (or ``jsonlib-python3``), ``yajl`` (couldn't test
-  "yajl" on Python3.4, it failed in Travis tests, but it worked on my laptop,
-  so, there's no guarantee),
+Added support to:
+
+* ``jsonlib`` (or ``jsonlib-python3``),
+* ``yajl`` (couldn't test "yajl" on Python3.4, it failed in Travis tests, but
+  it worked on my laptop, so, there's no guarantee),
 
 ## v0.0.2 (2014-10-27)
 
