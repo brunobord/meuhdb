@@ -24,7 +24,7 @@ try:
     DUMPER.update({'simplejson': simplejson.dumps})
     LOADER.update({'simplejson': simplejson.loads})
     DEFAULT_BACKEND = 'simplejson'
-except:
+except ImportError:
     pass
 
 try:
@@ -32,7 +32,15 @@ try:
     DUMPER.update({'jsonlib': jsonlib.dumps})
     LOADER.update({'jsonlib': jsonlib.loads})
     DEFAULT_BACKEND = 'jsonlib'
-except:
+except ImportError:
+    pass
+
+try:
+    import yajl
+    DUMPER.update({'yajl': yajl.dumps})
+    LOADER.update({'yajl': yajl.loads})
+    DEFAULT_BACKEND = 'yajl'
+except ImportError:
     pass
 
 try:
@@ -40,7 +48,7 @@ try:
     DUMPER.update({'ujson': ujson.dumps})
     LOADER.update({'ujson': ujson.loads})
     DEFAULT_BACKEND = 'ujson'
-except:
+except ImportError:
     pass
 
 
