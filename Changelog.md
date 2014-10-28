@@ -2,7 +2,7 @@
 
 ## v0.0.3 (unreleased)
 
-Nothing changed yet
+* Added support to ``jsonlib`` (or ``jsonlib-python3``)
 
 ## v0.0.2 (2014-10-27)
 

@@ -56,7 +56,7 @@ MeuhDb(path=None, autocommit=False, backend=DEFAULT_BACKEND)
   disk every time.
 * `backend`: chose which JSON backend you can use. There are 3 backends
   possible, from the least efficient, to the best one: "json" (from the standard
-  lib), "simplejson" or "ujson".
+  lib), "simplejson", "jsonlib", or "ujson".
   **MeuhDb** will try to load each one of them and make them available if you
   want. The ``DEFAULT_BACKEND`` value will take the most performing backend
   value available.
@@ -115,7 +115,8 @@ pip install -e ./
 You may want to install one or more of these packages to be able to pick one of
 these enhanced backends:
 
-* `simplejson`
+* `simplejson`,
+* `jsonlib` (or `jsonlib-python3`),
 * `ujson`
 
 To run the tests, you'll have to install ``tox`` (``pip install tox``) and
