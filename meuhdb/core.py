@@ -3,11 +3,13 @@
 MeuhDB, a database that says "meuh".
 """
 from __future__ import unicode_literals
-from uuid import uuid4
-import os
 from functools import wraps
 import json
+import os
+from uuid import uuid4
 import warnings
+
+import six
 
 DUMPER = {
     'json': json.dumps
@@ -22,7 +24,23 @@ try:
     DUMPER.update({'simplejson': simplejson.dumps})
     LOADER.update({'simplejson': simplejson.loads})
     DEFAULT_BACKEND = 'simplejson'
-except:
+except ImportError:
+    pass
+
+try:
+    import jsonlib
+    DUMPER.update({'jsonlib': jsonlib.dumps})
+    LOADER.update({'jsonlib': jsonlib.loads})
+    DEFAULT_BACKEND = 'jsonlib'
+except ImportError:
+    pass
+
+try:
+    import yajl
+    DUMPER.update({'yajl': yajl.dumps})
+    LOADER.update({'yajl': yajl.loads})
+    DEFAULT_BACKEND = 'yajl'
+except ImportError:
     pass
 
 try:
@@ -30,7 +48,7 @@ try:
     DUMPER.update({'ujson': ujson.dumps})
     LOADER.update({'ujson': ujson.loads})
     DEFAULT_BACKEND = 'ujson'
-except:
+except ImportError:
     pass
 
 
@@ -155,12 +173,15 @@ class MeuhDb(object):
     def commit(self):
         "Commit data to the storage."
         if self._meta.path:
-            with open(self._meta.path, 'w') as fd:
+            with open(self._meta.path, 'wb') as fd:
                 raw = self.raw.copy()
                 for index_name, values in raw['indexes'].items():
                     for value, keys in values.items():
                         raw['indexes'][index_name][value] = list(keys)
-                fd.write(self.serialize(raw))
+                try:
+                    fd.write(six.u(self.serialize(raw)))
+                except TypeError:
+                    fd.write(six.b(self.serialize(raw)))
 
     def all(self):
         "Retrieve the data from the keystore"

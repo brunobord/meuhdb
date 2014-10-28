@@ -8,6 +8,7 @@ except ImportError:
 NAME = 'meuhdb'
 DESCRIPTION = 'A database that says "Meuh".'
 REQUIREMENTS = [
+    'six',
 ]
 __VERSION__ = '0.0.3-dev'
 
