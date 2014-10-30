@@ -28,18 +28,18 @@ except ImportError:
     pass
 
 try:
-    import jsonlib
-    DUMPER.update({'jsonlib': jsonlib.dumps})
-    LOADER.update({'jsonlib': jsonlib.loads})
-    DEFAULT_BACKEND = 'jsonlib'
-except ImportError:
-    pass
-
-try:
     import yajl
     DUMPER.update({'yajl': yajl.dumps})
     LOADER.update({'yajl': yajl.loads})
     DEFAULT_BACKEND = 'yajl'
+except ImportError:
+    pass
+
+try:
+    import jsonlib
+    DUMPER.update({'jsonlib': jsonlib.dumps})
+    LOADER.update({'jsonlib': jsonlib.loads})
+    DEFAULT_BACKEND = 'jsonlib'
 except ImportError:
     pass
 
