@@ -1,11 +1,8 @@
 #-*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import json
-import logging
-from os import unlink, getenv
-import random
+from os import unlink
 from tempfile import mkstemp
-import time
 from unittest import TestCase
 
 from .core import MeuhDb
@@ -254,24 +251,3 @@ class DatabaseIndexTest(InMemoryDatabaseData, TestCase):
         self.assertTrue('name' in self.db.indexes)
         self.db.remove_index('name')
         self.assertFalse('name' in self.db.indexes)
-
-
-if getenv('RUN_PERFORMANCE_TESTS', False):
-    class DatabasePerformanceTest(InMemoryDatabase, TestCase):
-
-        def setUp(self):
-            super(DatabasePerformanceTest, self).setUp()
-            for x in range(200000):
-                self.db.set(x, {'score': random.randrange(1, 100)})
-
-        def test_performances(self):
-            t0 = time.clock()
-            self.db.filter(score=42)
-            t1 = time.clock()
-            self.db.create_index('score')
-            t2 = time.clock()
-            self.db.filter(score=42)
-            t3 = time.clock()
-            logging.debug(t3 - t2)
-            logging.debug(t1 - t0)
-            self.assertTrue(t3 - t2 < t1 - t0)
