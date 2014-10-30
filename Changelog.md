@@ -2,7 +2,7 @@
 
 ## master
 
-Nothing has changed yet
+* Added performances tests, and reordering libs priority.
 
 ## v0.0.3 (2014-10-28)
 
