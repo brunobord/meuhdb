@@ -147,6 +147,15 @@ class DatabaseStoreAutocommitTest(TestCase):
         self.assertEquals(index['Alice'], set(['1']))
         self.assertEquals(index['Bob'], set(['2']))
 
+    def test_autocommit_ensure_set(self):
+        self.db.create_index('name')
+        self.db.set('1', {'name': 'Alice'})
+        self.db.set('2', {'name': 'Alice'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertTrue('name' in db.indexes)
+        index = db.indexes['name']
+        self.assertEquals(index['Alice'], set(['1', '2']))
+
     def test_autocommit_insert(self):
         key = self.db.insert({'hello': 'world'})
         db = MeuhDb(self.filename)  # reload

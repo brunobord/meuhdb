@@ -3,6 +3,7 @@
 MeuhDB, a database that says "meuh".
 """
 from __future__ import unicode_literals
+from copy import deepcopy
 from functools import wraps
 import json
 import os
@@ -174,7 +175,7 @@ class MeuhDb(object):
         "Commit data to the storage."
         if self._meta.path:
             with open(self._meta.path, 'wb') as fd:
-                raw = self.raw.copy()
+                raw = deepcopy(self.raw)
                 for index_name, values in raw['indexes'].items():
                     for value, keys in values.items():
                         raw['indexes'][index_name][value] = list(keys)
