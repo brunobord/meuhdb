@@ -2,7 +2,8 @@
 
 ## master
 
-* Added performances tests, and reordering libs priority.
+* Added performances tests, and reordering libs priority,
+* Bugfix: prevent list/set mess during index update.
 
 ## v0.0.3 (2014-10-28)
 
