@@ -1,5 +1,5 @@
 """MeuhDB, a database that says "meuh"."""
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __url__ = "https://github.com/brunobord/meuhdb/"
 
-from .core import MeuhDb  # noqa
+from meuhdb.core import MeuhDb  # noqa

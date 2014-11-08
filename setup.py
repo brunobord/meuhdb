@@ -7,7 +7,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-init_py = open('meuhdb/__init__.py').read()
+init_py = open('meuhdb/__init__.py', 'r').read()
 metadata = dict(re.findall("__([a-z]+)__ = ['\"]([^']+)['\"]", init_py))
 metadata['doc'] = re.findall('"""(.+)"""', init_py)[0]
 
@@ -19,9 +19,11 @@ params = dict(
     author='Bruno Bord',
     author_email='bruno@jehaisleprintemps.net',
     url=metadata['url'],
-    license=open('LICENSE').read(),
+    license='MIT License',
     include_package_data=True,
-    install_requires=open('requirements.txt').readlines(),
+    install_requires=[
+        'six',
+    ],
     zip_safe=False,
     classifiers=[
     ],
