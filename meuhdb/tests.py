@@ -4,8 +4,10 @@ import json
 from os import unlink
 from tempfile import mkstemp
 from unittest import TestCase
+import logging
 
 from .core import MeuhDb
+logging.captureWarnings(True)
 
 
 class InMemoryDatabase(TestCase):
@@ -84,6 +86,12 @@ class DatabaseStoreChangeBackendTest(TestCase):
 
     def test_backend(self):
         self.assertEquals(self.db._meta.backend, 'json')
+        self.assertEquals(self.db._meta.serializer, json.dumps)
+        self.assertEquals(self.db._meta.deserializer, json.loads)
+
+    def test_missing_backend(self):
+        db = MeuhDb(backend='missing-json')
+        self.assertEquals(db._meta.backend, 'json')
         self.assertEquals(self.db._meta.serializer, json.dumps)
         self.assertEquals(self.db._meta.deserializer, json.loads)
 
