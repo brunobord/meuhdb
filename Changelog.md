@@ -4,7 +4,8 @@
 
 * Added performances tests, and reordering libs priority,
 * Bugfix: prevent list/set mess during index update,
-* Added coveralls.io configuration and badge on the README.
+* Added coveralls.io configuration and badge on the README,
+* Little refactors for easier access to API, easier versionning, etc.
 
 ## v0.0.3 (2014-10-28)
 
