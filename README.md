@@ -21,7 +21,7 @@ You may want to read [the Changelog](Changelog.md), too.
 ## Basic usage
 
 ``` python
->>> from meuhdb.core import MeuhDb
+>>> from meuhdb import MeuhDb
 >>> db = MeuhDb()  # Create in-memory database
 >>> db.set('one', {'name': 'Alice', 'good': True, 'chief': True})
 >>> db.set('two', {'name': 'Bob', 'good': True})
