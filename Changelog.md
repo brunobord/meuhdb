@@ -3,7 +3,9 @@
 ## master
 
 * Small refactor, splitting core module in submodules,
-* Bugfix: throw a ``BadValueError`` when the value provided is not a dict.
+* Bugfix: throw a ``BadValueError`` when the value provided is not a dict,
+* Add a new parameter: ``autocommit_after``. DB will be committed after "n"
+  committable operations (set, insert, update, delete...),
 
 ## v0.1.1 (2014-11-08)
 
