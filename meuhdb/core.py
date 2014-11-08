@@ -68,7 +68,7 @@ class MeuhDb(object):
                     self.raw.update(data)
                 except ValueError:
                     pass
-        self.clean_index()
+        self._clean_index()
 
     def serialize(self, obj):
         return self._meta.serializer(obj)
@@ -216,10 +216,12 @@ class MeuhDb(object):
 
     @autocommit
     def remove_index(self, idx_name):
+        "Remove an index from the database."
         if idx_name in self.indexes:
             del self.indexes[idx_name]
 
-    def clean_index(self):
+    def _clean_index(self):
+        "Clean index values after loading."
         for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):
