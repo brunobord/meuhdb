@@ -82,6 +82,18 @@ class MeuhDb(object):
     def __init__(self,
                  path=None, autocommit=False, autocommit_after=None,
                  backend=DEFAULT_BACKEND):
+        """
+        Options:
+
+        * ``path``: Path to the DB filename,
+        * ``autocommit``: If set to True, will save data to the DB at every
+          'write' operation,
+        * ``autocommit_after``: A numeric value. If set, the database will be
+          committed every "n" write operations,
+        * ``backend``: Set which backend to use. Will default to the fastest
+          backend available, or the stdlib ``json`` module.
+
+        """
         self._meta = Meta(path, autocommit, autocommit_after, backend)
         self.raw = {}
         self.raw['indexes'] = {}
