@@ -170,6 +170,10 @@ class MeuhDb(object):
         """Update a `key` in the keystore.
         If the key is non-existent, it's being created
         """
+        if not isinstance(value, dict):
+            raise BadValueError(
+                'The value {} is incorrect.'
+                ' Values should be strings'.format(value))
         if key in self.data:
             v = self.get(key)
             v.update(value)

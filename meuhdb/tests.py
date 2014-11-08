@@ -57,6 +57,12 @@ class DatabaseTest(InMemoryDatabase, TestCase):
         self.assertRaises(BadValueError, self.db.insert, 123)
         self.assertRaises(BadValueError, self.db.insert, None)
 
+    def test_bad_value_update(self):
+        self.db.set('key', {'name': 'me'})
+        self.assertRaises(BadValueError, self.db.update, 'key', '1')
+        self.assertRaises(BadValueError, self.db.update, 'key', 123)
+        self.assertRaises(BadValueError, self.db.update, 'key', None)
+
 
 class DatabaseStoreTest(TestCase):
     def setUp(self):
