@@ -3,7 +3,8 @@
 ## master
 
 * Added performances tests, and reordering libs priority,
-* Bugfix: prevent list/set mess during index update.
+* Bugfix: prevent list/set mess during index update,
+* Added coveralls.io configuration and badge on the README.
 
 ## v0.0.3 (2014-10-28)
 
