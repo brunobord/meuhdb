@@ -1,5 +1,9 @@
 # MeuhDb
 
+## master
+
+Nothing has changed yet.
+
 ## v0.1.1 (2014-11-08)
 
 * Hotfixing the tox tests mess.
