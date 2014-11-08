@@ -20,7 +20,7 @@ def autocommit(f):
     @wraps(f)
     def wrapper(self, *args, **kwargs):
         result = f(self, *args, **kwargs)
-        if self._meta.autocommit:
+        if self._meta.commit_ready():
             self.commit()
         return result
     return wrapper
@@ -35,9 +35,19 @@ class Meta(object):
     """Meta-information, not directly related to the database itself, but
     the way it's being accessed.
     """
-    def __init__(self, path=None, autocommit=False, backend=DEFAULT_BACKEND):
+    def __init__(self,
+                 path=None, autocommit=False, autocommit_after=None,
+                 backend=DEFAULT_BACKEND):
         self.path = path
         self.autocommit = autocommit
+        self.autocommit_after = autocommit_after
+
+        self.uses_counter = False
+        if self.autocommit_after is not None:
+            self.uses_counter = True
+            self.init_counter = long(self.autocommit_after)
+            self.counter = self.init_counter
+
         if backend not in BACKENDS:
             warnings.warn('{} backend not available, falling '
                           'back to standard json'.format(backend))
@@ -52,13 +62,27 @@ class Meta(object):
     def deserializer(self):
         return BACKENDS[self.backend]['loader']
 
+    def commit_ready(self):
+        if self.autocommit:
+            return True
+        if self.uses_counter:
+            self.counter -= 1
+            if self.counter:
+                return False
+            else:
+                # counter == 0 -> reset and commit
+                self.counter = long(self.init_counter)
+                return True
+
 
 class MeuhDb(object):
     """
     MeuhDb is a key / JSON value store.
     """
-    def __init__(self, path=None, autocommit=False, backend=DEFAULT_BACKEND):
-        self._meta = Meta(path, autocommit, backend)
+    def __init__(self,
+                 path=None, autocommit=False, autocommit_after=None,
+                 backend=DEFAULT_BACKEND):
+        self._meta = Meta(path, autocommit, autocommit_after, backend)
         self.raw = {}
         self.raw['indexes'] = {}
         self.raw['data'] = {}

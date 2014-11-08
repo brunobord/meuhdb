@@ -186,6 +186,36 @@ class DatabaseStoreAutocommitTest(TestCase):
         self.assertEquals(db.get(key), {'hello': 'world'})
 
 
+class DatabaseStoreAutocommitAfterTest(TestCase):
+    def setUp(self):
+        self.fd, self.filename = None, 'test.json'
+        self.db = MeuhDb(self.filename, autocommit_after=3)
+        self.db.commit()  # file is created
+
+    def tearDown(self):
+        unlink(self.filename)
+
+    def test_autocommit_after(self):
+        self.db.set('key', {'name': 'Alice'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertFalse(db.exists('key'))
+        self.db.set('key', {'name': 'Alice 2'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertFalse(db.exists('key'))
+        self.db.set('key', {'name': 'Alice 3'})
+        db = MeuhDb(self.filename)  # reload
+        self.assertTrue(db.exists('key'))
+
+    def test_autocommit_after_other_command(self):
+        self.db.set('key1', {'name': 'Alice'})
+        self.db.set('key2', {'name': 'Alice'})
+        self.db.set('key3', {'name': 'Alice'})
+        # Should be committed
+        self.db.delete('key3')
+        db = MeuhDb(self.filename)  # reload
+        self.assertTrue(db.exists('key3'))
+
+
 class DatabaseFilter(InMemoryDatabaseData, TestCase):
 
     def test_all(self):
