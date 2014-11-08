@@ -2,8 +2,8 @@
 
 ## master
 
-* Small refactor, splitting core module in submodules.
-
+* Small refactor, splitting core module in submodules,
+* Bugfix: throw a ``BadValueError`` when the value provided is not a dict.
 
 ## v0.1.1 (2014-11-08)
 

@@ -11,7 +11,8 @@ import warnings
 
 import six
 
-from meuhdb.backends import DEFAULT_BACKEND, BACKENDS
+from .backends import DEFAULT_BACKEND, BACKENDS
+from .exceptions import BadValueError
 
 
 def autocommit(f):
@@ -101,6 +102,10 @@ class MeuhDb(object):
     def set(self, key, value):
         "Set value to the key store."
         # if key already in data, update indexes
+        if not isinstance(value, dict):
+            raise BadValueError(
+                'The value {} is incorrect.'
+                ' Values should be strings'.format(value))
         if key in self.data:
             self.delete_from_index(key)
         self.data[key] = value
@@ -125,6 +130,10 @@ class MeuhDb(object):
         """Update a `key` in the keystore.
         If the key is non-existent, it's being created
         """
+        if not isinstance(value, dict):
+            raise BadValueError(
+                'The value {} is incorrect.'
+                ' Values should be strings'.format(value))
         if key in self.data:
             v = self.get(key)
             v.update(value)
