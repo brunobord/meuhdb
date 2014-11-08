@@ -12,6 +12,8 @@ import warnings
 
 import six
 
+from .exceptions import BadValueError
+
 DUMPER = {
     'json': json.dumps
 }
@@ -140,6 +142,10 @@ class MeuhDb(object):
     def set(self, key, value):
         "Set value to the key store."
         # if key already in data, update indexes
+        if not isinstance(value, dict):
+            raise BadValueError(
+                'The value {} is incorrect.'
+                ' Values should be strings'.format(value))
         if key in self.data:
             self.delete_from_index(key)
         self.data[key] = value
@@ -164,6 +170,10 @@ class MeuhDb(object):
         """Update a `key` in the keystore.
         If the key is non-existent, it's being created
         """
+        if not isinstance(value, dict):
+            raise BadValueError(
+                'The value {} is incorrect.'
+                ' Values should be strings'.format(value))
         if key in self.data:
             v = self.get(key)
             v.update(value)
