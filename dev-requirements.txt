@@ -1,2 +1,2 @@
 tox
-changes
+-e git+https://github.com/michaeljoseph/changes.git#egg=changes
