@@ -7,6 +7,8 @@ from unittest import TestCase
 import logging
 
 from .core import MeuhDb
+from .exceptions import BadValueError
+
 logging.captureWarnings(True)
 
 
@@ -46,6 +48,11 @@ class DatabaseTest(InMemoryDatabase, TestCase):
     def test_insert(self):
         key = self.db.insert({'hello': 'world'})
         self.assertEquals(self.db.get(key), {'hello': 'world'})
+
+    def test_bad_value(self):
+        self.assertRaises(BadValueError, self.db.set, 'a', '1')
+        self.assertRaises(BadValueError, self.db.set, 'a', 123)
+        self.assertRaises(BadValueError, self.db.set, 'a', None)
 
 
 class DatabaseStoreTest(TestCase):
