@@ -1,5 +1,9 @@
 # MeuhDb
 
+## v0.1.1 (2014-11-08)
+
+* Hotfixing the tox tests mess.
+
 ## v0.1.0 (2014-11-08)
 
 * Added performances tests, and reordering libs priority,
