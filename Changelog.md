@@ -1,9 +1,5 @@
 # MeuhDb
 
-## master
-
-Nothing has changed yet.
-
 ## v0.1.0 (2014-11-08)
 
 * Added performances tests, and reordering libs priority,
