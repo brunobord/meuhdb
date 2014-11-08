@@ -45,7 +45,7 @@ class Meta(object):
         self.uses_counter = False
         if self.autocommit_after is not None:
             self.uses_counter = True
-            self.init_counter = long(self.autocommit_after)
+            self.init_counter = int(self.autocommit_after)
             self.counter = self.init_counter
 
         if backend not in BACKENDS:
@@ -71,7 +71,7 @@ class Meta(object):
                 return False
             else:
                 # counter == 0 -> reset and commit
-                self.counter = long(self.init_counter)
+                self.counter = self.init_counter
                 return True
 
 
