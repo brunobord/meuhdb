@@ -4,7 +4,8 @@ from os import unlink
 from tempfile import mkstemp
 import random
 import time
-from meuhdb.core import MeuhDb, DUMPER
+from meuhdb.core import MeuhDb
+from meuhdb.backends import BACKENDS
 
 
 def dump_load(backend):
@@ -22,7 +23,7 @@ def dump_load(backend):
     return t3 - t2, t1 - t0
 
 if __name__ == '__main__':
-    result = ((dump_load(backend), backend) for backend in DUMPER)
+    result = ((dump_load(backend), backend) for backend in BACKENDS)
     result = sorted(result)
     for t, backend in result:
         print t, backend

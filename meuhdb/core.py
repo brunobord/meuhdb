@@ -5,54 +5,14 @@ MeuhDB, a database that says "meuh".
 from __future__ import unicode_literals
 from copy import deepcopy
 from functools import wraps
-import json
 import os
 from uuid import uuid4
 import warnings
 
 import six
 
+from .backends import DEFAULT_BACKEND, BACKENDS
 from .exceptions import BadValueError
-
-DUMPER = {
-    'json': json.dumps
-}
-LOADER = {
-    'json': json.loads
-}
-DEFAULT_BACKEND = 'json'
-
-try:
-    import simplejson
-    DUMPER.update({'simplejson': simplejson.dumps})
-    LOADER.update({'simplejson': simplejson.loads})
-    DEFAULT_BACKEND = 'simplejson'
-except ImportError:
-    pass
-
-try:
-    import yajl
-    DUMPER.update({'yajl': yajl.dumps})
-    LOADER.update({'yajl': yajl.loads})
-    DEFAULT_BACKEND = 'yajl'
-except ImportError:
-    pass
-
-try:
-    import jsonlib
-    DUMPER.update({'jsonlib': jsonlib.dumps})
-    LOADER.update({'jsonlib': jsonlib.loads})
-    DEFAULT_BACKEND = 'jsonlib'
-except ImportError:
-    pass
-
-try:
-    import ujson
-    DUMPER.update({'ujson': ujson.dumps})
-    LOADER.update({'ujson': ujson.loads})
-    DEFAULT_BACKEND = 'ujson'
-except ImportError:
-    pass
 
 
 def autocommit(f):
@@ -78,7 +38,7 @@ class Meta(object):
     def __init__(self, path=None, autocommit=False, backend=DEFAULT_BACKEND):
         self.path = path
         self.autocommit = autocommit
-        if backend not in DUMPER:
+        if backend not in BACKENDS:
             warnings.warn('{} backend not available, falling '
                           'back to standard json'.format(backend))
             backend = "json"
@@ -86,11 +46,11 @@ class Meta(object):
 
     @property
     def serializer(self):
-        return DUMPER[self.backend]
+        return BACKENDS[self.backend]['dumper']
 
     @property
     def deserializer(self):
-        return LOADER[self.backend]
+        return BACKENDS[self.backend]['loader']
 
 
 class MeuhDb(object):
@@ -109,7 +69,7 @@ class MeuhDb(object):
                     self.raw.update(data)
                 except ValueError:
                     pass
-        self.clean_index()
+        self._clean_index()
 
     def serialize(self, obj):
         return self._meta.serializer(obj)
@@ -265,10 +225,12 @@ class MeuhDb(object):
 
     @autocommit
     def remove_index(self, idx_name):
+        "Remove an index from the database."
         if idx_name in self.indexes:
             del self.indexes[idx_name]
 
-    def clean_index(self):
+    def _clean_index(self):
+        "Clean index values after loading."
         for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):
