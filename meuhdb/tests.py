@@ -53,6 +53,9 @@ class DatabaseTest(InMemoryDatabase, TestCase):
         self.assertRaises(BadValueError, self.db.set, 'a', '1')
         self.assertRaises(BadValueError, self.db.set, 'a', 123)
         self.assertRaises(BadValueError, self.db.set, 'a', None)
+        self.assertRaises(BadValueError, self.db.insert, '1')
+        self.assertRaises(BadValueError, self.db.insert, 123)
+        self.assertRaises(BadValueError, self.db.insert, None)
 
 
 class DatabaseStoreTest(TestCase):
