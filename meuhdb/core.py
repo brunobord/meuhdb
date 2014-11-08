@@ -5,52 +5,13 @@ MeuhDB, a database that says "meuh".
 from __future__ import unicode_literals
 from copy import deepcopy
 from functools import wraps
-import json
 import os
 from uuid import uuid4
 import warnings
 
 import six
 
-DUMPER = {
-    'json': json.dumps
-}
-LOADER = {
-    'json': json.loads
-}
-DEFAULT_BACKEND = 'json'
-
-try:
-    import simplejson
-    DUMPER.update({'simplejson': simplejson.dumps})
-    LOADER.update({'simplejson': simplejson.loads})
-    DEFAULT_BACKEND = 'simplejson'
-except ImportError:
-    pass
-
-try:
-    import yajl
-    DUMPER.update({'yajl': yajl.dumps})
-    LOADER.update({'yajl': yajl.loads})
-    DEFAULT_BACKEND = 'yajl'
-except ImportError:
-    pass
-
-try:
-    import jsonlib
-    DUMPER.update({'jsonlib': jsonlib.dumps})
-    LOADER.update({'jsonlib': jsonlib.loads})
-    DEFAULT_BACKEND = 'jsonlib'
-except ImportError:
-    pass
-
-try:
-    import ujson
-    DUMPER.update({'ujson': ujson.dumps})
-    LOADER.update({'ujson': ujson.loads})
-    DEFAULT_BACKEND = 'ujson'
-except ImportError:
-    pass
+from meuhdb.backends import DEFAULT_BACKEND, BACKENDS
 
 
 def autocommit(f):
@@ -76,7 +37,7 @@ class Meta(object):
     def __init__(self, path=None, autocommit=False, backend=DEFAULT_BACKEND):
         self.path = path
         self.autocommit = autocommit
-        if backend not in DUMPER:
+        if backend not in BACKENDS:
             warnings.warn('{} backend not available, falling '
                           'back to standard json'.format(backend))
             backend = "json"
@@ -84,11 +45,11 @@ class Meta(object):
 
     @property
     def serializer(self):
-        return DUMPER[self.backend]
+        return BACKENDS[self.backend]['dumper']
 
     @property
     def deserializer(self):
-        return LOADER[self.backend]
+        return BACKENDS[self.backend]['loader']
 
 
 class MeuhDb(object):
