@@ -2,7 +2,8 @@
 
 ## master
 
-Nothing has changed yet.
+* Small refactor, splitting core module in submodules.
+
 
 ## v0.1.1 (2014-11-08)
 
