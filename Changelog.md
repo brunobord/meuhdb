@@ -1,5 +1,9 @@
 # MeuhDb
 
+## master
+
+Nothing has changed yet
+
 ## v0.2.0 (2014-11-09)
 
 * Small refactor, splitting core module in submodules,
