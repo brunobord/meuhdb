@@ -1,1 +1,2 @@
 include README.rst Changelog.md LICENSE requirements.txt
+exclude README.md
