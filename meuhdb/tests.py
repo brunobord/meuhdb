@@ -26,9 +26,16 @@ class InMemoryDatabaseData(InMemoryDatabase):
 
 
 class DatabaseTest(InMemoryDatabase, TestCase):
-    def test_set_get_dict(self):
+    def test_set_get_simple(self):
         self.db.set('key', {'name': "me"})
         self.assertEquals(self.db.get('key'), {'name': "me"})
+
+    def test_set_copy(self):
+        value = {'a': 'abcd'}
+        self.db.set('key', value)
+        value.update({'b': 1234})
+        # An update on the initial value shouldn't re-write the value stored
+        self.assertEquals(self.db.get('key'), {'a': 'abcd'})
 
     def test_delete(self):
         self.db.set('key', {'name': "me"})

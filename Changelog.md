@@ -6,6 +6,8 @@
 * Bugfix: throw a ``BadValueError`` when the value provided is not a dict,
 * Add a new parameter: ``autocommit_after``. DB will be committed after "n"
   committable operations (set, insert, update, delete...),
+* Bugfix: use deepcopy() for the inserted / updated value. Prevent unwanted
+  value modification side-effects.
 
 ## v0.1.1 (2014-11-08)
 

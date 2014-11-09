@@ -142,10 +142,11 @@ class MeuhDb(object):
             raise BadValueError(
                 'The value {} is incorrect.'
                 ' Values should be strings'.format(value))
+        _value = deepcopy(value)
         if key in self.data:
             self.delete_from_index(key)
-        self.data[key] = value
-        self.update_index(key, value)
+        self.data[key] = _value
+        self.update_index(key, _value)
 
     @autocommit
     def insert(self, value):
