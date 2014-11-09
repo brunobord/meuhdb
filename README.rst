@@ -63,7 +63,11 @@ constructor:
 
 .. code:: python
 
-    MeuhDb(path=None, autocommit=False, autocommit_after=None, backend=DEFAULT_BACKEND)
+    MeuhDb(
+      path=None,
+      autocommit=False, autocommit_after=None,
+      lazy_indexes=False,
+      backend=DEFAULT_BACKEND)
 
 -  ``path``: is the file path of your JSON database if you want to save
    it to a file. If the file already exists, **MeuhDb** tries to load
@@ -74,6 +78,10 @@ constructor:
 -  ``autocommit_after``: A numeric value. If set, the database will be
    committed every "n" write operations. Bear in mind that if the
    ``autocommit`` flag is set, it has priority over the counter.
+-  ``lazy_indexes``: When set to True, when the DB is written to the
+   database, only the definition of the indexes is stored, not the index
+   values themselves. This means the DB is faster at writing times, but
+   will load slower, because we'll need to rebuild all indexes,
 -  ``backend``: chose which JSON backend you can use. There are 3
    backends possible, from the least efficient, to the best one: "json"
    (from the standard lib), "simplejson", "jsonlib", "yajl", or "ujson".
