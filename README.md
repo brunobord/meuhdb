@@ -57,7 +57,7 @@ dates, datetimes, sets, etc.)
 There are a few optional parameters with the ``MeuhDb`` class constructor:
 
 ```python
-MeuhDb(path=None, autocommit=False, backend=DEFAULT_BACKEND)
+MeuhDb(path=None, autocommit=False, autocommit_after=None, backend=DEFAULT_BACKEND)
 ```
 
 * `path`: is the file path of your JSON database if you want to save it to a
@@ -66,6 +66,9 @@ MeuhDb(path=None, autocommit=False, backend=DEFAULT_BACKEND)
 * `autocommit`: if set to `True`, every "write" operation will be transmitted
   to the file. It can be I/O consuming, since the whole DB is written on the
   disk every time.
+* ``autocommit_after``: A numeric value. If set, the database will be
+  committed every "n" write operations. Bear in mind that if the ``autocommit``
+  flag is set, it has priority over the counter.
 * `backend`: chose which JSON backend you can use. There are 3 backends
   possible, from the least efficient, to the best one: "json" (from the standard
   lib), "simplejson", "jsonlib", "yajl", or "ujson".
