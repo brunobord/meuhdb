@@ -2,7 +2,7 @@
 
 ## master
 
-Nothing has changed yet
+* Lazy indexes option: will write faster, but load slower,
 
 ## v0.2.0 (2014-11-09)
 
