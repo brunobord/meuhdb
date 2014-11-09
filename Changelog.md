@@ -1,6 +1,6 @@
 # MeuhDb
 
-## master
+## v0.2.0 (2014-11-09)
 
 * Small refactor, splitting core module in submodules,
 * Bugfix: throw a ``BadValueError`` when the value provided is not a dict,
