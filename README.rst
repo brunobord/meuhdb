@@ -18,7 +18,8 @@ To install the latest release:
 
 ... but since this is a very early release, you'd better stick to this
 Github source repository. You may want to read `the
-Changelog <Changelog.md>`__, too.
+Changelog <https://github.com/brunobord/meuhdb/blob/master/Changelog.md>`__,
+too.
 
 Basic usage
 -----------

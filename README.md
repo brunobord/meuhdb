@@ -16,7 +16,7 @@ pip install meuhdb
 ```
 
 ... but since this is a very early release, you'd better stick to this Github source repository.
-You may want to read [the Changelog](Changelog.md), too.
+You may want to read [the Changelog](https://github.com/brunobord/meuhdb/blob/master/Changelog.md), too.
 
 ## Basic usage
 
