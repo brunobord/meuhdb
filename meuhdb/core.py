@@ -37,11 +37,15 @@ class Meta(object):
     """
     def __init__(self,
                  path=None, autocommit=False, autocommit_after=None,
+                 lazy_indexes=False,
                  backend=DEFAULT_BACKEND):
         self.path = path
+        self.lazy_indexes = lazy_indexes
+
+        # Commits / Autocommit
         self.autocommit = autocommit
         self.autocommit_after = autocommit_after
-
+        # Counter
         self.uses_counter = False
         if self.autocommit_after is not None:
             self.uses_counter = True
@@ -81,6 +85,7 @@ class MeuhDb(object):
     """
     def __init__(self,
                  path=None, autocommit=False, autocommit_after=None,
+                 lazy_indexes=False,
                  backend=DEFAULT_BACKEND):
         """
         Options:
@@ -90,11 +95,19 @@ class MeuhDb(object):
           'write' operation,
         * ``autocommit_after``: A numeric value. If set, the database will be
           committed every "n" write operations,
+        * ``lazy_indexes``: When set to True, when the DB is written to the
+          database, only the definition of the indexes is stored, not the index
+          values themselves. This means the DB is faster at writing times, but
+          will load slower, because we'll need to rebuild all indexes,
         * ``backend``: Set which backend to use. Will default to the fastest
           backend available, or the stdlib ``json`` module.
 
         """
-        self._meta = Meta(path, autocommit, autocommit_after, backend)
+        self._meta = Meta(
+            path,
+            autocommit=autocommit, autocommit_after=autocommit_after,
+            lazy_indexes=lazy_indexes,
+            backend=backend)
         self.raw = {}
         self.raw['indexes'] = {}
         self.raw['data'] = {}
@@ -183,9 +196,14 @@ class MeuhDb(object):
         if self._meta.path:
             with open(self._meta.path, 'wb') as fd:
                 raw = deepcopy(self.raw)
-                for index_name, values in raw['indexes'].items():
-                    for value, keys in values.items():
-                        raw['indexes'][index_name][value] = list(keys)
+                # Save indexes only if not lazy
+                if self._meta.lazy_indexes:
+                    raw['lazy_indexes'] = list(raw['indexes'].keys())
+                    del raw['indexes']
+                else:
+                    for index_name, values in raw['indexes'].items():
+                        for value, keys in values.items():
+                            raw['indexes'][index_name][value] = list(keys)
                 try:
                     fd.write(six.u(self.serialize(raw)))
                 except TypeError:
@@ -268,6 +286,10 @@ class MeuhDb(object):
 
     def _clean_index(self):
         "Clean index values after loading."
+        if 'lazy_indexes' in self.raw:
+            for index_name in self.raw['lazy_indexes']:
+                self.build_index(index_name)
+            del self.raw['lazy_indexes']  # clear lazy_indexes
         for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):

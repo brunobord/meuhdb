@@ -321,3 +321,30 @@ class DatabaseIndexTest(InMemoryDatabaseData, TestCase):
         self.assertTrue('name' in self.db.indexes)
         self.db.remove_index('name')
         self.assertFalse('name' in self.db.indexes)
+
+
+class DatabaseStoreLazyIndexTest(TestCase):
+    def setUp(self):
+        self.fd, self.filename = None, 'test.json'
+        self.db = MeuhDb(self.filename, lazy_indexes=True)
+
+    def tearDown(self):
+        self.db.commit()
+        unlink(self.filename)
+
+    def test_indexes(self):
+        self.db.create_index('name')
+        self.db.set('key', {'name': 'Alice'})
+        self.assertTrue('name' in self.db.indexes)
+        index = self.db.indexes['name']
+        self.assertTrue('Alice' in index)
+        self.assertEquals(index['Alice'], set(['key']))
+        self.db.commit()
+        loaded_data = json.load(open(self.filename))
+        self.assertNotIn('indexes', loaded_data)
+        self.assertIn('lazy_indexes', loaded_data)
+        self.assertEquals(loaded_data['lazy_indexes'], ['name'])
+        # load data out of the lazy file
+        db = MeuhDb(self.filename)
+        self.assertEquals(db.data, {'key': {'name': 'Alice'}})
+        self.assertEquals(db.indexes, {'name': {'Alice': set(['key'])}})
