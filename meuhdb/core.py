@@ -212,7 +212,6 @@ class MeuhDb(object):
                 # LAZY INDEX PROCESSING
                 # Save indexes only if not lazy
                 lazy_indexes = self.lazy_indexes  # Keep this list safe
-                raw['lazy_indexes'] = list(lazy_indexes)
                 if self._meta.lazy_indexes:
                     del raw['indexes']
                 else:
@@ -222,7 +221,6 @@ class MeuhDb(object):
                     for index_name, values in raw['indexes'].items():
                         for value, keys in values.items():
                             raw['indexes'][index_name][value] = list(keys)
-                ### CLEAN INDEX DEFS
                 try:
                     fd.write(six.u(self.serialize(raw)))
                 except TypeError:
@@ -309,10 +307,9 @@ class MeuhDb(object):
 
     def _clean_index(self):
         "Clean index values after loading."
-        if 'lazy_indexes' in self.raw:
-            for index_name in self.raw['lazy_indexes']:
-                self.build_index(index_name)
-            del self.raw['lazy_indexes']  # clear lazy_indexes
+        for idx_name, idx_def in self.index_defs.items():
+            if idx_def['type'] == 'lazy':
+                self.build_index(idx_name)
         for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):

@@ -85,8 +85,12 @@ class DatabaseStoreLazyIndexTest(TempStorageDatabase):
         self.db.commit()
         loaded_data = json.load(open(self.filename))
         self.assertNotIn('indexes', loaded_data)
-        self.assertIn('lazy_indexes', loaded_data)
-        self.assertEquals(loaded_data['lazy_indexes'], ['name'])
+        self.assertIn('index_defs', loaded_data)
+        self.assertIn('name', loaded_data['index_defs'])
+        self.assertEquals(
+            loaded_data['index_defs']['name'],
+            {'type': 'lazy'}
+        )
         # load data out of the lazy file
         db = MeuhDb(self.filename)
         self.assertEquals(db.data, {'key': {'name': 'Alice'}})
