@@ -1,7 +1,8 @@
 import json
 
 from meuhdb.core import MeuhDb
-from meuhdb.tests import InMemoryDatabaseData, TempStorageDatabase
+from meuhdb.tests import InMemoryDatabase, InMemoryDatabaseData
+from meuhdb.tests import TempStorageDatabase
 
 
 class DatabaseIndexDataTest(InMemoryDatabaseData):
@@ -90,3 +91,37 @@ class DatabaseStoreLazyIndexTest(TempStorageDatabase):
         db = MeuhDb(self.filename)
         self.assertEquals(db.data, {'key': {'name': 'Alice'}})
         self.assertEquals(db.indexes, {'name': {'Alice': set(['key'])}})
+
+
+class DatabaseIndexDefsTest(InMemoryDatabase):
+
+    def test_create_index(self):
+        self.db.create_index('name')
+        self.assertIn('name', self.db.index_defs)
+        idx = self.db.index_defs['name']
+        self.assertEquals(idx['type'], 'default')
+        self.assertEquals(self.db.lazy_indexes, set([]))
+
+    def test_create_lazy(self):
+        self.db.create_index('name', _type='lazy')
+        self.db.create_index('stuff')
+        self.assertIn('name', self.db.index_defs)
+        idx = self.db.index_defs['name']
+        self.assertEquals(idx['type'], 'lazy')
+        self.assertEquals(self.db.lazy_indexes, set(['name']))
+
+
+class DatabaseIndexDefsLazyTest(TempStorageDatabase):
+
+    options = {'lazy_indexes': True}
+
+    def test_lazy_indexes(self):
+        self.db.create_index('name')  # should be default
+        self.db.create_index('stuff', _type="default")
+        self.db.create_index('thing', _type="lazy")
+        # But it's a lazy connection, everything's lazy
+        self.assertIn('name', self.db.index_defs)
+        idx = self.db.index_defs['name']
+        self.assertEquals(idx['type'], 'lazy')
+        self.assertEquals(
+            self.db.lazy_indexes, set(['name', 'stuff', 'thing']))
