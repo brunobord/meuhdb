@@ -111,6 +111,7 @@ class MeuhDb(object):
         self.raw = {}
         self.raw['indexes'] = {}
         self.raw['data'] = {}
+        self.raw['index_defs'] = {}
         if path:
             if os.path.exists(path):
                 try:
@@ -135,6 +136,11 @@ class MeuhDb(object):
     def indexes(self):
         "Return index data"
         return self.raw['indexes']
+
+    @property
+    def index_defs(self):
+        "Return the index definitions"
+        return self.raw['index_defs']
 
     def exists(self, key):
         "Return True if key is in the keystore."
@@ -191,19 +197,31 @@ class MeuhDb(object):
             v = value
         self.set(key, v)
 
+    @property
+    def lazy_indexes(self):
+        return set([
+            idx_name for (idx_name, value) in self.raw['index_defs'].items()
+            if value['type'] == 'lazy'
+        ])
+
     def commit(self):
         "Commit data to the storage."
         if self._meta.path:
             with open(self._meta.path, 'wb') as fd:
                 raw = deepcopy(self.raw)
+                # LAZY INDEX PROCESSING
                 # Save indexes only if not lazy
-                if self._meta.lazy_indexes:
-                    raw['lazy_indexes'] = list(raw['indexes'].keys())
-                    del raw['indexes']
-                else:
+                lazy_indexes = self.lazy_indexes  # Keep this list safe
+                if not self._meta.lazy_indexes:
+                    # Remove indexes if needed
+                    for idx_name in lazy_indexes:
+                        del raw['indexes'][idx_name]
                     for index_name, values in raw['indexes'].items():
                         for value, keys in values.items():
                             raw['indexes'][index_name][value] = list(keys)
+                # don't store indexes if not needed
+                if not raw['indexes'] or self._meta.lazy_indexes:
+                    del raw['indexes']
                 try:
                     fd.write(six.u(self.serialize(raw)))
                 except TypeError:
@@ -258,16 +276,16 @@ class MeuhDb(object):
                 self.indexes[k][v].add(key)
 
     @autocommit
-    def create_index(self, name, recreate=False):
+    def create_index(self, name, recreate=False, _type='default'):
         """
         Create an index.
         If recreate is True, recreate even if already there.
         """
         if name not in self.indexes or recreate:
-            self.build_index(name)
+            self.build_index(name, _type)
 
     @autocommit
-    def build_index(self, idx_name):
+    def build_index(self, idx_name, _type='default'):
         "Build the index related to the `name`."
         indexes = {}
         for key, item in self.data.items():
@@ -277,6 +295,10 @@ class MeuhDb(object):
                     indexes[value] = set([])
                 indexes[value].add(key)
         self.indexes[idx_name] = indexes
+        if self._meta.lazy_indexes:
+            # Every index is lazy
+            _type = 'lazy'
+        self.index_defs[idx_name] = {'type': _type}
 
     @autocommit
     def remove_index(self, idx_name):
@@ -286,10 +308,9 @@ class MeuhDb(object):
 
     def _clean_index(self):
         "Clean index values after loading."
-        if 'lazy_indexes' in self.raw:
-            for index_name in self.raw['lazy_indexes']:
-                self.build_index(index_name)
-            del self.raw['lazy_indexes']  # clear lazy_indexes
+        for idx_name, idx_def in self.index_defs.items():
+            if idx_def['type'] == 'lazy':
+                self.build_index(idx_name)
         for index_name, values in self.indexes.items():
             for value in values:
                 if not isinstance(values[value], set):
