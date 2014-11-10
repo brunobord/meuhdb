@@ -212,15 +212,16 @@ class MeuhDb(object):
                 # LAZY INDEX PROCESSING
                 # Save indexes only if not lazy
                 lazy_indexes = self.lazy_indexes  # Keep this list safe
-                if self._meta.lazy_indexes:
-                    del raw['indexes']
-                else:
+                if not self._meta.lazy_indexes:
                     # Remove indexes if needed
                     for idx_name in lazy_indexes:
                         del raw['indexes'][idx_name]
                     for index_name, values in raw['indexes'].items():
                         for value, keys in values.items():
                             raw['indexes'][index_name][value] = list(keys)
+                # don't store indexes if not needed
+                if not raw['indexes'] or self._meta.lazy_indexes:
+                    del raw['indexes']
                 try:
                     fd.write(six.u(self.serialize(raw)))
                 except TypeError:

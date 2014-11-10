@@ -1,8 +1,7 @@
 import json
 
 from meuhdb.core import MeuhDb
-from meuhdb.tests import InMemoryDatabase, InMemoryDatabaseData
-from meuhdb.tests import TempStorageDatabase
+from meuhdb.tests import InMemoryDatabaseData, TempStorageDatabase
 
 
 class DatabaseIndexDataTest(InMemoryDatabaseData):
@@ -97,7 +96,7 @@ class DatabaseStoreLazyIndexTest(TempStorageDatabase):
         self.assertEquals(db.indexes, {'name': {'Alice': set(['key'])}})
 
 
-class DatabaseIndexDefsTest(InMemoryDatabase):
+class DatabaseIndexDefsTest(TempStorageDatabase):
 
     def test_create_index(self):
         self.db.create_index('name')
@@ -105,14 +104,34 @@ class DatabaseIndexDefsTest(InMemoryDatabase):
         idx = self.db.index_defs['name']
         self.assertEquals(idx['type'], 'default')
         self.assertEquals(self.db.lazy_indexes, set([]))
+        self.db.commit()
+        data = json.load(open(self.filename))
+        self.assertIn('index_defs', data)
+        self.assertIn('name', data['index_defs'])
+        self.assertIn('indexes', data)
 
-    def test_create_lazy(self):
+    def test_create_lazy_and_default(self):
         self.db.create_index('name', _type='lazy')
         self.db.create_index('stuff')
         self.assertIn('name', self.db.index_defs)
         idx = self.db.index_defs['name']
         self.assertEquals(idx['type'], 'lazy')
         self.assertEquals(self.db.lazy_indexes, set(['name']))
+        self.db.commit()
+        data = json.load(open(self.filename))
+        self.assertIn('index_defs', data)
+        self.assertIn('name', data['index_defs'])
+        self.assertIn('indexes', data)
+        self.assertIn('stuff', data['indexes'])
+        self.assertNotIn('name', data['indexes'])
+
+    def test_create_lazy(self):
+        self.db.create_index('name', _type='lazy')
+        self.db.commit()
+        data = json.load(open(self.filename))
+        self.assertIn('index_defs', data)
+        self.assertIn('name', data['index_defs'])
+        self.assertNotIn('indexes', data)
 
 
 class DatabaseIndexDefsLazyTest(TempStorageDatabase):
