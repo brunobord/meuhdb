@@ -187,9 +187,8 @@ License
 -------
 
 This software is published under the terms of the MIT License See the
-`LICENSE <LICENSE>`__ file for more information.
+`LICENSE <https://github.com/brunobord/meuhdb/blob/master/LICENSE>`__
+file for more information.
 
 .. |Build Status| image:: https://travis-ci.org/brunobord/meuhdb.svg?branch=master
-   :target: https://travis-ci.org/brunobord/meuhdb
 .. |Coverage Status| image:: https://img.shields.io/coveralls/brunobord/meuhdb.svg
-   :target: https://coveralls.io/r/brunobord/meuhdb

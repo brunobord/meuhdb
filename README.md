@@ -2,8 +2,8 @@
 
 > The database that says "Meuh"
 
-[![Build Status](https://travis-ci.org/brunobord/meuhdb.svg?branch=master)](https://travis-ci.org/brunobord/meuhdb)
-[![Coverage Status](https://img.shields.io/coveralls/brunobord/meuhdb.svg)](https://coveralls.io/r/brunobord/meuhdb)
+![Build Status](https://travis-ci.org/brunobord/meuhdb.svg?branch=master)
+![Coverage Status](https://img.shields.io/coveralls/brunobord/meuhdb.svg)
 
 **MeuhDb** is a "dummy" key / JSON value store written in Python.
 
@@ -172,4 +172,5 @@ will work as a "todo list". If you have any bug report, suggestion, please do.
 ## License
 
 This software is published under the terms of the MIT License
-See the [LICENSE](LICENSE) file for more information.
+See the [LICENSE](https://github.com/brunobord/meuhdb/blob/master/LICENSE)
+file for more information.
