@@ -1,6 +1,6 @@
 # MeuhDb
 
-## master
+## v0.3.0 (2014-11-11)
 
 * Lazy indexes option: will write faster, but load slower,
 * Changed the way indexes are built/loaded/stored, This might break your data.

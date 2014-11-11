@@ -122,6 +122,24 @@ Example:
 -  if somehow the index is screwed up, simply create it with the
    ``recreate`` argument: ``db.create_index('name', recreate=True)``.
 
+Index types
+~~~~~~~~~~~
+
+You can specify the index type using this:
+
+::
+
+    db.create_index('name', _type='lazy')
+
+You can only create two types of indexes: ``default`` or ``lazy``. Lazy
+indexes will not be stored when the database is committed, and will be
+reloaded at startup. You can mix default and lazy indexes.
+
+Note: since all JSON key should be strings, you can't obviously store
+indexes with non-string values. As soon as an index receives a
+non-string value (an int or a boolean, for example), it'll be changed
+into a lazy index.
+
 Warnings
 --------
 
