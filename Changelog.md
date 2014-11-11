@@ -4,7 +4,8 @@
 
 * Lazy indexes option: will write faster, but load slower,
 * Changed the way indexes are built/loaded/stored, This might break your data.
-  But who cares? I'm probably the only one to use this.
+  But who cares? I'm probably the only one to use this,
+* Automatically change index type if inserted value is non-string.
 
 ## v0.2.0 (2014-11-09)
 
