@@ -28,3 +28,11 @@ class TempStorageDatabase(TestCase):
 
     def tearDown(self):
         unlink(self.filename)
+
+
+class TempStorageDatabaseData(TempStorageDatabase):
+    def setUp(self):
+        super(TempStorageDatabaseData, self).setUp()
+        self.db.set('one', {'name': 'Alice', 'good': True, 'chief': True})
+        self.db.set('two', {'name': 'Bob', 'good': True})
+        self.db.set('three', {'name': 'Carl', 'good': False})
