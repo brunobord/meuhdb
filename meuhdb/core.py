@@ -271,6 +271,9 @@ class MeuhDb(object):
         "Update the index with the new key/values."
         for k, v in value.items():
             if k in self.indexes:
+                # A non-string index value switches it into a lazy one.
+                if not isinstance(v, six.string_types):
+                    self.index_defs[k]['type'] = 'lazy'
                 if v not in self.indexes[k]:
                     self.indexes[k][v] = set([])
                 self.indexes[k][v].add(key)
@@ -288,14 +291,18 @@ class MeuhDb(object):
     def build_index(self, idx_name, _type='default'):
         "Build the index related to the `name`."
         indexes = {}
+        has_non_string_values = False
         for key, item in self.data.items():
             if idx_name in item:
                 value = item[idx_name]
+                # A non-string index value switches it into a lazy one.
+                if not isinstance(value, six.string_types):
+                    has_non_string_values = True
                 if value not in indexes:
                     indexes[value] = set([])
                 indexes[value].add(key)
         self.indexes[idx_name] = indexes
-        if self._meta.lazy_indexes:
+        if self._meta.lazy_indexes or has_non_string_values:
             # Every index is lazy
             _type = 'lazy'
         self.index_defs[idx_name] = {'type': _type}

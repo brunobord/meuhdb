@@ -128,6 +128,10 @@ You can only create two types of indexes: ``default`` or ``lazy``.
 Lazy indexes will not be stored when the database is committed, and will be
 reloaded at startup. You can mix default and lazy indexes.
 
+Note: since all JSON key should be strings, you can't obviously store indexes
+with non-string values. As soon as an index receives a non-string value (an int
+or a boolean, for example), it'll be changed into a lazy index.
+
 ## Warnings
 
 This is not a real actual ACID-ready database manager. This will probably suit a
