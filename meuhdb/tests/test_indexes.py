@@ -1,7 +1,8 @@
 import json
 
 from meuhdb.core import MeuhDb
-from meuhdb.tests import InMemoryDatabaseData, TempStorageDatabase
+from meuhdb.tests import InMemoryDatabaseData
+from meuhdb.tests import TempStorageDatabase, TempStorageDatabaseData
 
 
 class DatabaseIndexDataTest(InMemoryDatabaseData):
@@ -132,6 +133,35 @@ class DatabaseIndexDefsTest(TempStorageDatabase):
         self.assertIn('index_defs', data)
         self.assertIn('name', data['index_defs'])
         self.assertNotIn('indexes', data)
+
+
+class DatabaseIndexDefsTestData(TempStorageDatabaseData):
+
+    def test_create_index_change_to_lazy(self):
+        self.db.create_index('good')
+        self.assertTrue('good' in self.db.indexes)
+        self.assertTrue('good' in self.db.index_defs)
+        # There's a non-string value, it becomes lazy
+        self.assertEquals(self.db.index_defs['good']['type'], 'lazy')
+
+    def test_create_index_change_to_lazy_commit(self):
+        self.db.create_index('good')
+        self.db.commit()
+        # reload
+        db = MeuhDb(self.filename)
+        result = db.filter(good=True)
+        self.assertTrue(db._used_index)
+        self.assertTrue('one' in result)
+        self.assertTrue('two' in result)
+        self.assertFalse('three' in result)
+
+    def test_create_index_change_on_the_fly(self):
+        self.db.create_index('name')
+        self.assertTrue('name' in self.db.indexes)
+        self.assertTrue('name' in self.db.index_defs)
+        self.assertEquals(self.db.index_defs['name']['type'], 'default')
+        self.db.set('key', {'name': 123})
+        self.assertEquals(self.db.index_defs['name']['type'], 'lazy')
 
 
 class DatabaseIndexDefsLazyTest(TempStorageDatabase):
