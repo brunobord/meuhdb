@@ -235,7 +235,7 @@ class MeuhDb(object):
         "Return the items in the keystore with keys in `keys`."
         return dict((k, v) for k, v in self.data.items() if k in keys)
 
-    def filter_key(self, key, value):
+    def simple_filter(self, key, value):
         "Search keys whose values match with the searched values"
         searched = {key: value}
         return set([k for k, v in self.data.items() if
@@ -256,7 +256,8 @@ class MeuhDb(object):
                     keys = keys.intersection(
                         self.indexes[key_filter][v_filter])
             else:
-                keys = keys.intersection(self.filter_key(key_filter, v_filter))
+                keys = keys.intersection(
+                    self.simple_filter(key_filter, v_filter))
         return self.keys_to_values(keys)
 
     def delete_from_index(self, key):
