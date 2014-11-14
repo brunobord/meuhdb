@@ -84,7 +84,7 @@ MeuhDb(
   want. The ``DEFAULT_BACKEND`` value will take the most performing backend
   value available.
   If you provide an unavailable backend, don't worry, **MeuhDb** will fallback
-  to the comfortable ``json` from the standard library.
+  to the comfortable `json` from the standard library.
 
 Example:
 
@@ -131,6 +131,29 @@ reloaded at startup. You can mix default and lazy indexes.
 Note: since all JSON key should be strings, you can't obviously store indexes
 with non-string values. As soon as an index receives a non-string value (an int
 or a boolean, for example), it'll be changed into a lazy index.
+
+## Advanced querying
+
+As you could see, this `filter` method is only able to match records that have
+*each* argument truely *identical*. If you want to perform advanced queries, you
+can still use regular set-related operators to intersect or make unions on your
+criteria.
+
+The `filter_keys` method will behave exactly like the `filter` method, except
+that it returns *keys* instead of a `dict` with keys/values.
+
+```python
+>>> db.filter_keys(good=True)
+{'one', 'two'}
+>>> db.filter_keys(name='Carl')
+{'three'}
+>>> db.filter_keys(good=True) & db.filter_keys(name='Alice')  # intersects the results
+{'one'}
+>>> db.filter_keys(good=True) & db.filter_keys(name='Carl')
+set()
+>>> db.filter_keys(good=True) | db.filter_keys(name='Carl')  # unions the result
+{'one', 'two', 'three'}
+```
 
 ## Warnings
 

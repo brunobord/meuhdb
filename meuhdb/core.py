@@ -235,16 +235,8 @@ class MeuhDb(object):
         "Return the items in the keystore with keys in `keys`."
         return dict((k, v) for k, v in self.data.items() if k in keys)
 
-    def simple_filter(self, key, value):
-        "Search keys whose values match with the searched values"
-        searched = {key: value}
-        return set([k for k, v in self.data.items() if
-                    intersect(searched, v) == searched])
-
-    def filter(self, **kwargs):
-        """
-        Filter data according to the given arguments.
-        """
+    def filter_keys(self, **kwargs):
+        "Return a set of keys filtered according to the given arguments."
         self._used_index = False
         keys = set(self.data.keys())
         for key_filter, v_filter in kwargs.items():
@@ -258,6 +250,19 @@ class MeuhDb(object):
             else:
                 keys = keys.intersection(
                     self.simple_filter(key_filter, v_filter))
+        return keys
+
+    def simple_filter(self, key, value):
+        "Search keys whose values match with the searched values"
+        searched = {key: value}
+        return set([k for k, v in self.data.items() if
+                    intersect(searched, v) == searched])
+
+    def filter(self, **kwargs):
+        """
+        Filter data according to the given arguments.
+        """
+        keys = self.filter_keys(**kwargs)
         return self.keys_to_values(keys)
 
     def delete_from_index(self, key):

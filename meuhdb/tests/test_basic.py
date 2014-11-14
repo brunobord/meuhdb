@@ -84,3 +84,29 @@ class DatabaseFilter(InMemoryDatabaseData):
         self.assertFalse('one' in result)
         self.assertTrue('two' in result)
         self.assertFalse('three' in result)
+
+    def test_filter_keys(self):
+        result1 = self.db.filter_keys(good=True)
+        self.assertTrue('one' in result1)
+        self.assertTrue('two' in result1)
+        self.assertFalse('three' in result1)
+        result2 = self.db.filter_keys(name='Carl')
+        self.assertFalse('one' in result2)
+        self.assertFalse('two' in result2)
+        self.assertTrue('three' in result2)
+
+    def test_and(self):
+        result1 = self.db.filter_keys(good=True)
+        result2 = self.db.filter_keys(name='Carl')
+        result = result1 & result2
+        self.assertFalse('one' in result)
+        self.assertFalse('two' in result)
+        self.assertFalse('three' in result)
+
+    def test_or(self):
+        result1 = self.db.filter_keys(good=True)
+        result2 = self.db.filter_keys(name='Carl')
+        result = result1 | result2
+        self.assertTrue('one' in result)
+        self.assertTrue('two' in result)
+        self.assertTrue('three' in result)
