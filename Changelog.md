@@ -1,5 +1,9 @@
 # MeuhDb
 
+## master (unreleased)
+
+* Drop Python 3.3 support.
+
 ## v0.3.0 (2014-11-11)
 
 * Lazy indexes option: will write faster, but load slower,
