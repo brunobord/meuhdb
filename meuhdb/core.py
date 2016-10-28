@@ -206,6 +206,7 @@ class MeuhDb(object):
 
     @autocommit
     def del_key(self, key, key_to_delete):
+        "Delete the `key_to_delete` for the record found with `key`."
         v = self.get(key)
         if key_to_delete in v:
             del v[key_to_delete]
