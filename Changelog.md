@@ -4,6 +4,7 @@
 
 * Drop Python 3.3 support.
 * Switch from nose to py.test.
+* Add Python 3.5 support.
 
 ## v0.3.0 (2014-11-11)
 
