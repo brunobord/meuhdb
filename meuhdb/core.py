@@ -176,7 +176,7 @@ class MeuhDb(object):
 
     @autocommit
     def delete(self, key):
-        "Delete a `key from the keystore."
+        "Delete a `key` from the keystore."
         if key in self.data:
             self.delete_from_index(key)
         del self.data[key]
@@ -203,6 +203,13 @@ class MeuhDb(object):
             idx_name for (idx_name, value) in self.raw['index_defs'].items()
             if value['type'] == 'lazy'
         ])
+
+    @autocommit
+    def del_key(self, key, key_to_delete):
+        v = self.get(key)
+        if key_to_delete in v:
+            del v[key_to_delete]
+            self.set(key, v)
 
     def commit(self):
         "Commit data to the storage."

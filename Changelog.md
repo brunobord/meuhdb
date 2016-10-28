@@ -4,6 +4,7 @@
 
 * Drop Python 3.3 support.
 * Switch from nose to py.test.
+* New action: ``del_key``, to delete a key in a record.
 
 ## v0.3.0 (2014-11-11)
 

@@ -20,7 +20,7 @@ You may want to read [the Changelog](https://github.com/brunobord/meuhdb/blob/ma
 
 ## Basic usage
 
-``` python
+```python
 >>> from meuhdb import MeuhDb
 >>> db = MeuhDb()  # Create in-memory database
 >>> db.set('one', {'name': 'Alice', 'good': True, 'chief': True})
@@ -42,6 +42,9 @@ False
 >>> db.update('eb3c3a1d-8999-4052-9e3c-2f3542c047b1', {'age': 42})
 >>> db.get('eb3c3a1d-8999-4052-9e3c-2f3542c047b1')
 {'age': 42, 'name': 'John'}
+>>> db.del_key('eb3c3a1d-8999-4052-9e3c-2f3542c047b1', 'name')
+>>> db.get('eb3c3a1d-8999-4052-9e3c-2f3542c047b1')
+{'age': 42}
 ```
 
 At the moment, you can only query on "equalities", i.e. a strict equality
