@@ -47,6 +47,14 @@ class DatabaseTest(InMemoryDatabase):
         self.assertRaises(BadValueError, self.db.update, 'key', 123)
         self.assertRaises(BadValueError, self.db.update, 'key', None)
 
+    def test_del_key(self):
+        self.db.set('key', {'name': 'me', 'age': 42})
+        # missing key in record, shouldn't trigger an error
+        self.db.del_key('key', 'missing')
+        self.assertEquals(self.db.get('key'), {'name': 'me', 'age': 42})
+        self.db.del_key('key', 'name')
+        self.assertEquals(self.db.get('key'), {'age': 42})
+
 
 class DatabaseFilter(InMemoryDatabaseData):
 
