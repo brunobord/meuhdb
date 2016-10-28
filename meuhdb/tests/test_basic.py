@@ -19,6 +19,8 @@ class DatabaseTest(InMemoryDatabase):
         self.assertTrue(self.db.exists('key'))
         self.db.delete('key')
         self.assertFalse(self.db.exists('key'))
+        with self.assertRaises(KeyError):
+            self.db.delete('key')
 
     def test_update(self):
         self.db.set('key', {'name': "me"})
@@ -54,6 +56,8 @@ class DatabaseTest(InMemoryDatabase):
         self.assertEquals(self.db.get('key'), {'name': 'me', 'age': 42})
         self.db.del_key('key', 'name')
         self.assertEquals(self.db.get('key'), {'age': 42})
+        with self.assertRaises(KeyError):
+            self.db.del_key('missing', 'name')
 
 
 class DatabaseFilter(InMemoryDatabaseData):
