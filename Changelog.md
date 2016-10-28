@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Drop Python 3.3 support.
+* Switch from nose to py.test.
 
 ## v0.3.0 (2014-11-11)
 
